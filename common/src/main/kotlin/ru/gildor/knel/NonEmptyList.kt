@@ -13,7 +13,7 @@ public interface NonEmptyList<out T> : List<T> {
             "First element of NonEmptyList always exist. Use head or first() instead",
             ReplaceWith(expression = "head")
     )
-    fun firstOrNull(): Boolean = false
+    fun firstOrNull(): T = head
 }
 
 public fun <T> NonEmptyList(head: T): NonEmptyList<T> = SingletonNonEmptyList(head)
@@ -45,8 +45,8 @@ public inline fun <T> List<T>.toNelUnsafe(): NonEmptyList<T> {
 }
 
 private class NonEmptyListImpl<out T>(
-    override val head: T,
-    override val tail: List<T> = emptyList()
+        override val head: T,
+        override val tail: List<T> = emptyList()
 ) : NonEmptyList<T> {
 
     private val all = if (tail.isEmpty()) {
@@ -56,7 +56,6 @@ private class NonEmptyListImpl<out T>(
     }
 
     override val size: Int = all.size
-
 
 
     override fun contains(element: @UnsafeVariance T): Boolean {
@@ -85,14 +84,23 @@ private class NonEmptyListImpl<out T>(
         if (this === other) return true
         if (other !is List<*>) return false
 
-        return other == this
+        val e1 = listIterator()
+        val e2 = other.listIterator()
+        while (e1.hasNext() && e2.hasNext()) {
+            val o1 = e1.next()
+            val o2 = e2.next()
+            if (!(if (o1 == null) o2 == null else o1 == o2)) {
+                return false
+            }
+        }
+        return !(e1.hasNext() || e2.hasNext())
     }
 
     override fun hashCode(): Int {
         return all.hashCode()
     }
 
-    override fun toString(): String = "NonEmptyList($head)"
+    override fun toString(): String = all.toString()
 }
 
 private class SingletonNonEmptyList<out T>(
@@ -137,18 +145,19 @@ private class SingletonNonEmptyList<out T>(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || this::class != List::class) return false
+        if (other !is List<*>) return false
+        if (other is SingletonNonEmptyList<*>) return head == other.head
 
-        other as List<*>
-
-        return other == this
+        if (other.size > 1) return false
+        return other.first() == head
     }
 
     override fun hashCode(): Int {
-        return head?.hashCode() ?: 0
+        // To produce the same hash code as any list with a single element
+        return 31 + (head?.hashCode() ?: 0)
     }
 
-    override fun toString(): String = "NonEmptyList($head)"
+    override fun toString(): String = "[$head]"
 }
 
 private class SingleListIterator<T>(val value: T) : ListIterator<T> {

@@ -1,0 +1,23 @@
+{
+  "name": "knel",
+  "version" : "0.1.0",
+  "description" : "Kotlin Non",
+  "main" : "kotlinx-coroutines-core.js",
+  "author": "Andrey Mischenko",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/gildor/knel",
+  "bugs": {
+    "url": "https://github.com/gildor/knel/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gildor/knel.git"
+  },
+  "keywords": [
+    "Kotlin",
+    "NEL",
+    "NonEmptyList",
+    "JavaScript",
+    "Mulitplatform"
+  ]
+}
