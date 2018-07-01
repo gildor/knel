@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ru.gildor.knel
 
 import kotlin.test.*
@@ -15,7 +17,7 @@ class NonEmptyListTest {
     }
 
     @Test
-    fun nelListEquals() {
+    fun nelList_Equals() {
         assertTrue(nelOf(1, 2) == nelOf(1, 2))
         assertTrue(NonEmptyList(1, listOf(2)) == NonEmptyList(1, listOf(2)))
         assertTrue(NonEmptyList(1, nelOf(2)) == NonEmptyList(1, nelOf(2)))
@@ -32,6 +34,7 @@ class NonEmptyListTest {
         assertEquals(nel.hashCode(), nel.hashCode(), "Non stable hash code")
         assertEquals(42, nelOf(11).hashCode())
         assertEquals(listOf(11).hashCode(), nelOf(11).hashCode())
+        assertEquals(listOf(null).hashCode(), nelOf(null).hashCode())
         assertNotEquals(nelOf(5).hashCode(), nelOf(55).hashCode())
     }
 
@@ -48,8 +51,9 @@ class NonEmptyListTest {
     fun nelHashCode() {
         val nel = nelOf(1, 2, 3)
         assertEquals(nel.hashCode(), nel.hashCode(), "Non stable hash code")
-        assertEquals(nelOf(1,2,3), nelOf(1,2,3))
-        assertEquals(nelOf(1,2,3), nelOf(1,2,3))
+        assertEquals(listOf(null, null).hashCode(), nelOf(null, null).hashCode())
+        assertNotEquals(nelOf(1, 2, 3), nelOf(1, 2, 3, 4))
+        assertNotEquals(nelOf(1, 2, 3), nelOf(3, 2, 1))
     }
 
     @Test
@@ -68,6 +72,7 @@ class NonEmptyListTest {
     @Test
     fun nelTail() {
         assertEquals(listOf(2), nelOf(1, 2).tail)
+        assertEquals(listOf(1, 2, 3), listOf(1) + nelOf(1, 2, 3).tail)
         assertEquals(listOf("B", "C"), nelOf("A", "B", "C").tail)
         assertEquals(listOf(2, null), nelOf(1, 2, null).tail)
     }
@@ -90,11 +95,30 @@ class NonEmptyListTest {
     @Suppress("DEPRECATION")
     @Test
     fun nelDeprecatedMethods() {
-        assertEquals(false, nelOf(1,2,3).isEmpty())
-        assertEquals(false, NonEmptyList(1, listOf(2,3)).isEmpty())
+        assertEquals(false, nelOf(1, 2, 3).isEmpty())
+        assertEquals(false, NonEmptyList(1, listOf(2, 3)).isEmpty())
         assertEquals('a', nelOf('a', 'b', 'c').firstOrNull())
         assertEquals('a', NonEmptyList('a', nelOf('b', 'c')).firstOrNull())
         assertEquals(null, nelOf(null, 2, 3).firstOrNull())
+    }
+
+    @Test
+    fun toNel() {
+        assertEquals(null, emptyList<Int>().toNel())
+        assertEquals(null, ArrayList<Int>().toNel())
+        assertTrue(listOf(1).toNel() is NonEmptyList<Int>)
+        assertEquals(nelOf("A", "B", "C"), listOf("A", "B", "C").toNel())
+    }
+
+    @Suppress("USELESS_IS_CHECK")
+    @Test
+    fun toNelUnsafe() {
+        assertEquals(nelOf('x', 'y', 'z'), listOf('x', 'y', 'z').toNelUnsafe())
+        assertEquals(listOf(1), listOf(1).toNelUnsafe())
+        assertTrue(listOf(1).toNelUnsafe() is NonEmptyList<Int>)
+        assertFailsWith<NoSuchElementException> {
+            emptyList<String>().toNelUnsafe()
+        }
     }
 
 

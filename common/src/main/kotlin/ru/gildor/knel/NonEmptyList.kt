@@ -2,6 +2,11 @@
 
 package ru.gildor.knel
 
+/**
+ * Nel - Non Empty List
+ */
+typealias Nel<A> = NonEmptyList<A>
+
 public interface NonEmptyList<out T> : List<T> {
     val head: T
     val tail: List<T>
@@ -22,7 +27,7 @@ public fun <T> NonEmptyList(head: T, tail: List<T>): NonEmptyList<T> {
     return if (tail.isEmpty()) {
         SingletonNonEmptyList(head)
     } else {
-        NonEmptyListImpl(head, tail)
+        NonEmptyListImpl(head, tail.toList())
     }
 }
 
@@ -37,9 +42,18 @@ public fun <T> nelOf(head: T, vararg tail: T): NonEmptyList<T> {
 }
 
 public inline fun <T> List<T>.toNel(): NonEmptyList<T>? {
-    return if (isEmpty()) null else NonEmptyList(first(), drop(1))
+    return when {
+        isEmpty() -> null
+        this is NonEmptyList<T> -> this
+        else -> NonEmptyList(first(), drop(1))
+    }
 }
 
+/**
+ * Converts [this] receiver [List] of [T] to [NonEmptyList] of [T]
+ *
+ * @throws NoSuchElementException if [this] is empty
+ */
 public inline fun <T> List<T>.toNelUnsafe(): NonEmptyList<T> {
     return toNel() ?: throw NoSuchElementException("List is empty")
 }
@@ -178,4 +192,13 @@ private class SingleListIterator<T>(val value: T) : ListIterator<T> {
     override fun previous(): Nothing = throw NoSuchElementException()
 
     override fun previousIndex(): Int = -1
+}
+
+public operator fun <T> NonEmptyList<T>.plus(elements: Iterable<T>): NonEmptyList<T> {
+    return if (elements is List && size == 1) {
+        NonEmptyList(head, elements.toList())
+    } else {
+        // We sure that this list is never empty, so can use unsafe operator
+        ((this as List<T>) + elements).toNelUnsafe()
+    }
 }
