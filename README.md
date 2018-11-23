@@ -14,7 +14,7 @@ Problem that you cannot force user of your API to use only non empty lists using
 Possible solution: introduce special type that represents list with at least one element.
 So now compiler can check correct usage of your API and no need to check.
 
-This library provides such type: [NonEmptyList](common/src/main/kotlin/ru/gildor/knel/NonEmptyList.kt)
+This library provides such type: [NonEmptyList](src/commonMain/kotlin/ru/gildor/knel/NonEmptyList.kt)
 
 `NonEmptyList` is subtype of `kotlin.List` and can be used as any other list. 
 
