@@ -110,16 +110,34 @@ class NonEmptyListTest {
         assertEquals(nelOf("A", "B", "C"), listOf("A", "B", "C").toNel())
     }
 
-    @Suppress("USELESS_IS_CHECK")
     @Test
     fun toNelUnsafe() {
         assertEquals(nelOf('x', 'y', 'z'), listOf('x', 'y', 'z').toNelUnsafe())
         assertEquals(listOf(1), listOf(1).toNelUnsafe())
-        assertTrue(listOf(1).toNelUnsafe() is NonEmptyList<Int>)
+        val nel = listOf(1).toNelUnsafe()
+        @Suppress("USELESS_IS_CHECK")
+        assertTrue(nel is NonEmptyList<Int>)
+        assertEquals(nelOf(1), nel)
         assertFailsWith<NoSuchElementException> {
             emptyList<String>().toNelUnsafe()
         }
     }
 
+    @Test
+    fun plus() {
+        val list = nelOf(1) + nelOf(2)
+        @Suppress("USELESS_IS_CHECK")
+        assertTrue(list is NonEmptyList)
+        assertEquals(nelOf(1, 2), list)
+    }
+
+    @Test
+    fun plusElement() {
+        val list = nelOf(1) + 2
+        @Suppress("USELESS_IS_CHECK")
+        assertTrue(list is NonEmptyList)
+        assertEquals(nelOf(1, 2), list)
+
+    }
 
 }

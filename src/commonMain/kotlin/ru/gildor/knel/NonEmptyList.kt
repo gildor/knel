@@ -202,3 +202,12 @@ public operator fun <T> NonEmptyList<T>.plus(elements: Iterable<T>): NonEmptyLis
         ((this as List<T>) + elements).toNelUnsafe()
     }
 }
+
+public inline operator fun <T> NonEmptyList<T>.plus(element: T): NonEmptyList<T> {
+    return if (size == 1) {
+        NonEmptyList(head, listOf(element))
+    } else {
+        // We sure that this list is never empty, so can use unsafe operator
+        ((this as List<T>) + element).toNelUnsafe()
+    }
+}
