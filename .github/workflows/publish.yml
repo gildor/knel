@@ -6,7 +6,7 @@ on:
     - published
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
@@ -15,9 +15,9 @@ jobs:
       with:
         java-version: 1.8
     - name: Publish
-      run: ./gradlew publish
       env:
         bintrayUser: ${{secrets.bintrayUser}}
         bintrayKey: ${{secrets.bintrayKey}}
         bintrayRepo: ${{secrets.bintrayRepo}}
         bintrayAutoRelease: ${{secrets.bintrayAutoRelease}}
+      run: ./gradlew publish
