@@ -1,7 +1,8 @@
 name: Publish
 
 on: release
- action: published
+ action: 
+ - published
 
 jobs:
   build:
