@@ -1,12 +1,12 @@
 import org.gradle.internal.impldep.org.apache.maven.Maven
 
 plugins {
-    kotlin("multiplatform") version "1.3.41"
+    kotlin("multiplatform") version "1.3.50"
     `maven-publish`
 }
 
 group = "ru.gildor.knel"
-version = 0.3
+version = 0.4
 
 repositories {
     mavenCentral()
