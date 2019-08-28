@@ -16,8 +16,8 @@ jobs:
         java-version: 1.8
     - name: Publish
       run: ./gradlew publish
-        env:
-          bintrayUser: ${{secrets.bintrayUser}}
-          bintrayKey: ${{secrets.bintrayKey}}
-          bintrayRepo: ${{secrets.bintrayRepo}}
-          bintrayAutoRelease: ${{secrets.bintrayAutoRelease}}
+      env:
+        bintrayUser: ${{secrets.bintrayUser}}
+        bintrayKey: ${{secrets.bintrayKey}}
+        bintrayRepo: ${{secrets.bintrayRepo}}
+        bintrayAutoRelease: ${{secrets.bintrayAutoRelease}}
