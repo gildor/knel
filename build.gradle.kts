@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "ru.gildor.knel"
-version = 0.4.0
+version = "0.4.0"
 
 repositories {
     mavenCentral()
