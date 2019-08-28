@@ -1,0 +1,23 @@
+name: Publish to Bintray
+
+on:
+  release:
+    action: 
+    - published
+      
+jobs:
+  publish:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Publish
+      env:
+        bintrayUser: ${{secrets.bintrayUser}}
+        bintrayKey: ${{secrets.bintrayKey}}
+        bintrayRepo: ${{secrets.bintrayRepo}}
+        bintrayAutoRelease: ${{secrets.bintrayAutoRelease}}
+      run: ./gradlew publish
