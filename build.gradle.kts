@@ -33,6 +33,7 @@ dependencies {
     commonMainImplementation("org.jetbrains.kotlin:kotlin-stdlib")
     commonTestImplementation("org.jetbrains.kotlin:kotlin-test-annotations-common")
     commonTestImplementation("org.jetbrains.kotlin:kotlin-test-common")
+    commonMainImplementation(project(":module2"))
 
     "jvmMainImplementation"("org.jetbrains.kotlin:kotlin-stdlib")
     "jvmTestImplementation"("org.jetbrains.kotlin:kotlin-test-junit")

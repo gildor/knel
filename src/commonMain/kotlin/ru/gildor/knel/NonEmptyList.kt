@@ -1,6 +1,13 @@
 @file:Suppress("RedundantVisibilityModifier", "FunctionName", "NOTHING_TO_INLINE", "DeprecatedCallableAddReplaceWith", "unused")
 
 package ru.gildor.knel
+import ru.gildor.module2.Module2Dep
+import ru.gildor.module2.moduleFoo
+
+fun main() {
+    println(Module2Dep().hello())
+    println(moduleFoo())
+}
 
 /**
  * Nel - Non Empty List
